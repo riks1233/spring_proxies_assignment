@@ -5,6 +5,7 @@
   - **TODO: provide success and error message JSON structure.**
 - `application.properties` and `build.gradle` are excluded from repo and have to be configured manually from their analog `.dist` files (found in the same directories).
   - **TODO: edit accordingly, when Docker gets implemented.**
+- A postman collection is included (`proxies_assignment.postman_collection.json`) to test the requests manually.
 
 # Set up
 
