@@ -1,14 +1,14 @@
 # Proxies test assignment
 
 - Endpoints are described in `src > main/java/com/example/proxies_assignment > controller > ProxyController.java`
-  **TODO: provide detailed descriptions here.**
-  **TODO: provide success and error message JSON structure.**
+  - **TODO: provide detailed descriptions here.**
+  - **TODO: provide success and error message JSON structure.**
 - `application.properties` and `build.gradle` are excluded from repo and have to be configured manually from their analog `.dist` files (found in the same directories).
-  **TODO: edit accordingly, when Docker gets implemented.**
+  - **TODO: edit accordingly, when Docker gets implemented.**
 
 # Set up
 
-**TODO: edit accordingly, when Docker gets implemented.**
+**TODO: fill, when Docker gets implemented.**
 
 # Versions
 
