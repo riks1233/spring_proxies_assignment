@@ -9,7 +9,7 @@ Created with:
 
 # Endpoints
 
-**Also see the included postman collection `app/postman_requests_collection.json`.**
+**Also see the included postman collection `postman_requests_collection.json`.**
 
 - `/api/v1/proxies` [GET] - Get paginated JSON list of proxies.
   - Params:

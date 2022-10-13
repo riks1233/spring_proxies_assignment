@@ -35,7 +35,7 @@ import com.example.proxies_assignment.repository.ProxyRepository;
 @ActiveProfiles("test")
 // This is needed for ProxyController to receive its @Autowired proxyRepository.
 @AutoConfigureDataJpa
-// @FixMethodOrder
+// Make the tests execute in sequential order and depend on eachother.
 @TestMethodOrder(MethodOrderer.MethodName.class)
 class ProxyControllerTest {
 
