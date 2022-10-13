@@ -1,8 +1,3 @@
-### Exclude configuration files ###
-# They have to be copied and configured from their analog .dist files on initial set up.
-**/src/main/resources/application.properties
-build.gradle
-
 HELP.md
 .gradle
 build/

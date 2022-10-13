@@ -1,0 +1,56 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.4'
+	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+	id 'java'
+  id "org.flywaydb.flyway" version "9.4.0"
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.boot:spring-boot-devtools:2.7.4'
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
+	runtimeOnly 'org.postgresql:postgresql'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    testLogging {
+        // Show output of System.out.println();
+        showStandardStreams = true
+    }
+}
+tasks.named('test') {
+  useJUnit()
+	useJUnitPlatform()
+}
+
+flyway {
+    url = 'jdbc:postgresql://' + System.getenv("DB_HOST") + ':' + System.getenv("DB_PORT") + '/' + System.getenv("DB_NAME")
+    user = System.getenv("DB_USER")
+    password = System.getenv("DB_USER_PASSWORD")
+    driver = 'org.postgresql.Driver'
+    // Allows running flywayClean. Might be useful for development.
+    cleanDisabled = false
+}
+
+task flywayTestDBMigrate(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+    url = 'jdbc:postgresql://localhost:5432/proxies_assignment_testdb'
+    user = 'proxies_assignment_testdb_user'
+    password = 'mypassword'
+}
+task flywayTestDBClean(type: org.flywaydb.gradle.task.FlywayCleanTask) {
+    url = 'jdbc:postgresql://localhost:5432/proxies_assignment_testdb'
+    user = 'proxies_assignment_testdb_user'
+    password = 'mypassword'
+}
+

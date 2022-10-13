@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:14.5
+    restart: always
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_USER_PASSWORD}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+volumes:
+  dbdata:

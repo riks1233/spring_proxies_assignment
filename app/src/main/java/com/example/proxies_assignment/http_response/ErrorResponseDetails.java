@@ -1,5 +1,7 @@
 package com.example.proxies_assignment.http_response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ErrorResponseDetails<T> extends ResponseDetails<T> {
     private String errorMessage;
     private String endpoint;
@@ -10,6 +12,7 @@ public class ErrorResponseDetails<T> extends ResponseDetails<T> {
         this.endpoint = endpoint;
     }
 
+    @JsonProperty("error_message")
     public String getErrorMessage() {
         return errorMessage;
     }

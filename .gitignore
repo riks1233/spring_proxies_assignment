@@ -1,2 +1,6 @@
 ### VS Code ###
 .vscode/
+
+### Env variables ###
+.docker_env
+.local_env

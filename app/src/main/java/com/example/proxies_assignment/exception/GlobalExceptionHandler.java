@@ -22,9 +22,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public Response<Null> handleUnexpectedException(Exception exception, WebRequest request) {
-        // TODO: Log the value and respond with a generic error message.
+        // TODO: Log the value.
         // End users should not be able to see unexpected server-side error messages.
-        return new ErrorMessageResponse("Something unexpected happened.", request.getDescription(false));
+        return new ErrorMessageResponse("Oops! Something unexpected happen. Could not resolve request.", request.getDescription(false));
     }
 
     // Handle bad/invalid values from requests.
@@ -48,7 +48,13 @@ public class GlobalExceptionHandler {
     // Handle malformed JSON requests.
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Response<Null> handleParsingException(HttpMessageNotReadableException exception, WebRequest request) {
-        return new ErrorMessageResponse(String.format("Received an invalid JSON body: %s", exception.getMessage()), request.getDescription(false));
+        // TODO: Remove comment
+        // return new ErrorMessageResponse(String.format("Received an invalid JSON body: %s", exception.getMessage()), request.getDescription(false));
+        return new ErrorMessageResponse(
+            "Received malformed input. If you were trying to send JSON, " +
+            "check that values contain the correct data or data type",
+            request.getDescription(false)
+        );
     }
 
     // Handle unique constraint violations.

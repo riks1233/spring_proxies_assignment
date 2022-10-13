@@ -24,13 +24,13 @@ import com.example.proxies_assignment.model.Proxy;
 import com.example.proxies_assignment.repository.ProxyRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/proxies")
 public class ProxyController {
 
 	@Autowired
 	ProxyRepository proxyRepository;
 
-    @GetMapping("/proxies/all")
+    @GetMapping("")
     public Response<List<Proxy>> getPaginatedProxies(
         @RequestParam(name = "page") Integer page,
         @RequestParam(name = "per_page") Integer perPage
@@ -48,7 +48,7 @@ public class ProxyController {
         return new SuccessResponse<>(proxies);
     }
 
-    @GetMapping("/proxies/filtered")
+    @GetMapping("/filtered")
     public Response<List<Proxy>> getFilteredProxies(
         @RequestParam(name = "name") String name,
         @RequestParam(name = "type") String type
@@ -58,7 +58,7 @@ public class ProxyController {
         return new SuccessResponse<>(proxies);
     }
 
-    @GetMapping("/proxies/{id}")
+    @GetMapping("/{id}")
     public Response<Proxy> getProxy(
         @PathVariable("id") long id
     ) {
@@ -69,7 +69,7 @@ public class ProxyController {
         throw new GenericErrorException(String.format("Proxy with id %d does not exist.", id));
     }
 
-    @PostMapping("/proxies")
+    @PostMapping("")
     public Response<Proxy> createProxy(
         // This validation is problematic, when user sends malformed JSON.
         @Valid @RequestBody Proxy proxy
@@ -78,7 +78,7 @@ public class ProxyController {
         return new SuccessResponse<>(savedProxy);
     }
 
-    @PutMapping("/proxies/{id}")
+    @PutMapping("/{id}")
     public Response<Proxy> updateProxy(
         @PathVariable("id") long id,
         // @RequestBody Map<Object, Object> params
@@ -131,7 +131,7 @@ public class ProxyController {
         throw new GenericErrorException(String.format("Proxy with id %d does not exist.", id));
     }
 
-    @DeleteMapping("/proxies/{id}")
+    @DeleteMapping("/{id}")
     public Response<Proxy> deleteProxy(
         @PathVariable("id") long id
     ) {
