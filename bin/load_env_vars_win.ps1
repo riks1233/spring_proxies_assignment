@@ -6,11 +6,16 @@
 # do so from a fresh shell without relevant environment variables set.
 
 $scriptDir = Split-Path $MyInvocation.MyCommand.Path
-foreach($line in Get-Content "$scriptDir\..\.local_env") {
-    if($line -match '^\s*[^\s=#]+=[^\s]+$'){
-        $keyVal = $line -split '=', 2
-        $key = $keyVal[0].Trim()
-        $val = $keyVal[1].Trim()
-        [Environment]::SetEnvironmentVariable($key, $val)
+$envFile = "$scriptDir\..\.env"
+if (Test-Path -Path $envFile -PathType Leaf) {
+  foreach ($line in Get-Content "$scriptDir\..\.env") {
+    if ($line -match '^\s*[^\s=#]+=[^\s]+$') {
+      $keyVal = $line -split '=', 2
+      $key = $keyVal[0].Trim()
+      $val = $keyVal[1].Trim()
+      [Environment]::SetEnvironmentVariable($key, $val)
     }
+  }
+} else {
+  Write-Host "`.env` file has not been created. Create one from .env.dist template and populate it with relevant values."
 }

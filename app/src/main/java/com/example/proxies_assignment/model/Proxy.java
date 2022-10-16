@@ -2,7 +2,6 @@ package com.example.proxies_assignment.model;
 
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -129,7 +128,27 @@ public class Proxy {
         this.active = active;
     }
 
-    public static void validate(@Valid Proxy proxy) {
-        System.out.println(proxy.getHostname());
+    public void updateFieldsFromAnother(Proxy anotherProxy) {
+        if (anotherProxy.getName() != null) {
+            this.setName(anotherProxy.getName());
+        }
+        if (anotherProxy.getType() != null) {
+            this.setType(anotherProxy.getType());
+        }
+        if (anotherProxy.getHostname() != null) {
+            this.setHostname(anotherProxy.getHostname());
+        }
+        if (anotherProxy.getPort() != null) {
+            this.setPort(anotherProxy.getPort());
+        }
+        if (anotherProxy.getUsername() != null) {
+            this.setUsername(anotherProxy.getUsername());
+        }
+        if (anotherProxy.getPassword() != null) {
+            this.setPasswordWithoutHashing(anotherProxy.getPassword());
+        }
+        if (anotherProxy.isActive() != null) {
+            this.setActive(anotherProxy.isActive());
+        }
     }
 }

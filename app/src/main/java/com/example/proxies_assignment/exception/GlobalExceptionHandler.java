@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
     public Response<Null> handleUnexpectedException(Exception exception, WebRequest request) {
         // TODO: Log the value.
         // End users should not be able to see unexpected server-side error messages.
-        return new ErrorMessageResponse("Oops! Something unexpected happen. Could not resolve request.", request.getDescription(false));
+        return new ErrorMessageResponse("Oops! Something unexpected happened. Could not resolve request.", request.getDescription(false));
     }
 
     // Handle bad/invalid values from requests.
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
         // return new ErrorMessageResponse(String.format("Received an invalid JSON body: %s", exception.getMessage()), request.getDescription(false));
         return new ErrorMessageResponse(
             "Received malformed input. If you were trying to send JSON, " +
-            "check that values contain the correct data or data type",
+            "check that it is valid JSON and that values contain the correct data or data type",
             request.getDescription(false)
         );
     }

@@ -28,6 +28,9 @@ services:
       - spring-postgres
     expose:
       - ${DB_PORT}
+  # Test DB has to use another port than 5432, which is not
+  # configurable in postgres docker image out-of-the-box.
+  # testdb:
 volumes:
   dbdata:
 networks:

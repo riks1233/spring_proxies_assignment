@@ -44,13 +44,13 @@ flyway {
 }
 
 task flywayTestDBMigrate(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
-    url = 'jdbc:postgresql://localhost:5432/proxies_assignment_testdb'
+    url = 'jdbc:postgresql://localhost:5433/proxies_assignment_testdb'
     user = 'proxies_assignment_testdb_user'
-    password = 'mypassword'
+    password = 'password'
 }
 task flywayTestDBClean(type: org.flywaydb.gradle.task.FlywayCleanTask) {
-    url = 'jdbc:postgresql://localhost:5432/proxies_assignment_testdb'
+    url = 'jdbc:postgresql://localhost:5433/proxies_assignment_testdb'
     user = 'proxies_assignment_testdb_user'
-    password = 'mypassword'
+    password = 'password'
 }
 

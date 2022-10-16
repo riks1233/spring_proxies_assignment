@@ -35,7 +35,6 @@ public class ProxyController {
         @RequestParam(name = "page") Integer page,
         @RequestParam(name = "per_page") Integer perPage
     ) {
-        // TODO: Find a way to do error handling with annotations.
         page -= 1;
         if (page < 0) {
             throw new GenericErrorException("`page` must be greater than or equal to 1.");
@@ -66,12 +65,11 @@ public class ProxyController {
         if (existingProxyOptional.isPresent()) {
             return new SuccessResponse<Proxy>(existingProxyOptional.get());
         }
-        throw new GenericErrorException(String.format("Proxy with id %d does not exist.", id));
+        throw new GenericErrorException(proxyDoesNotExistText(id));
     }
 
     @PostMapping("")
     public Response<Proxy> createProxy(
-        // This validation is problematic, when user sends malformed JSON.
         @Valid @RequestBody Proxy proxy
     ) {
         Proxy savedProxy = proxyRepository.save(proxy);
@@ -81,54 +79,16 @@ public class ProxyController {
     @PutMapping("/{id}")
     public Response<Proxy> updateProxy(
         @PathVariable("id") long id,
-        // @RequestBody Map<Object, Object> params
         @RequestBody Proxy updatedProxy
     ) {
         Optional<Proxy> existingProxyOptional = proxyRepository.findById(id);
         if (existingProxyOptional.isPresent()) {
-            // TODO: Find a way to automate validation with tools.
             Proxy existingProxy = existingProxyOptional.get();
-            if (updatedProxy.getName() != null) {
-                existingProxy.setName(updatedProxy.getName());
-            }
-            if (updatedProxy.getType() != null) {
-                existingProxy.setType(updatedProxy.getType());
-            }
-            if (updatedProxy.getHostname() != null) {
-                existingProxy.setHostname(updatedProxy.getHostname());
-            }
-            if (updatedProxy.getPort() != null) {
-                existingProxy.setPort(updatedProxy.getPort());
-            }
-            if (updatedProxy.getUsername() != null) {
-                existingProxy.setUsername(updatedProxy.getUsername());
-            }
-            if (updatedProxy.getPassword() != null) {
-                existingProxy.setPasswordWithoutHashing(updatedProxy.getPassword());
-            }
-            if (updatedProxy.isActive() != null) {
-                existingProxy.setActive(updatedProxy.isActive());
-            }
-
+            existingProxy.updateFieldsFromAnother(updatedProxy);
             Proxy savedProxy = proxyRepository.save(existingProxy);
             return new SuccessResponse<>(savedProxy);
-
-            // This manual field assignment does not work for enum.
-
-            // params.forEach((k, v) -> {
-            //     Field field = ReflectionUtils.findField(Proxy.class, (String) k);
-            //     if (field != null) {
-            //         field.setAccessible(true);
-            //         ReflectionUtils.setField(field, existingProxy, field.getType().cast(v));
-            //     }
-            // });
-            // Set<ConstraintViolation<Proxy>> violations = validator.validate(existingProxy);
-            // if (!violations.isEmpty()) {
-            //     throw new InvalidPropertyException(violations.iterator().next().getMessage());
-            // }
-
         }
-        throw new GenericErrorException(String.format("Proxy with id %d does not exist.", id));
+        throw new GenericErrorException(proxyDoesNotExistText(id));
     }
 
     @DeleteMapping("/{id}")
@@ -140,6 +100,10 @@ public class ProxyController {
             proxyRepository.deleteById(id);
             return new SuccessResponse<>(proxy.get());
         }
-        throw new GenericErrorException(String.format("Proxy with id %d does not exist.", id));
+        throw new GenericErrorException(proxyDoesNotExistText(id));
+    }
+
+    private String proxyDoesNotExistText(long id) {
+        return String.format("Proxy with id %d does not exist.", id);
     }
 }

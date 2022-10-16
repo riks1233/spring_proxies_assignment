@@ -29,7 +29,7 @@
 					}
 				],
 				"url": {
-					"raw": "localhost:8080/api/v1/proxies/all?page=1&per_page=30",
+					"raw": "localhost:8080/api/v1/proxies?page=1&per_page=30",
 					"host": [
 						"localhost"
 					],
@@ -37,8 +37,7 @@
 					"path": [
 						"api",
 						"v1",
-						"proxies",
-						"all"
+						"proxies"
 					],
 					"query": [
 						{
@@ -78,7 +77,7 @@
 					}
 				],
 				"url": {
-					"raw": "localhost:8080/api/v1/proxies",
+					"raw": "localhost:8080/api/v1/proxies/filtered?name=&type=",
 					"host": [
 						"localhost"
 					],
@@ -86,7 +85,18 @@
 					"path": [
 						"api",
 						"v1",
-						"proxies"
+						"proxies",
+						"filtered"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": ""
+						},
+						{
+							"key": "type",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -155,7 +165,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\" : \"abobaabiba\",\r\n    \"type\" : \"HTTP\",\r\n    \"hostname\" : \"localhost\",\r\n    \"port\" : 8080,\r\n    \"username\" : \"barmalej123\",\r\n    \"password\" : \"paroooool\",\r\n    \"active\" : true\r\n}"
+					"raw": "{\r\n    \"name\" : \"testname1\",\r\n    \"type\" : \"HTTP\",\r\n    \"hostname\" : \"localhost1\",\r\n    \"port\" : 8080,\r\n    \"username\" : \"testusername1\",\r\n    \"password\" : \"password\",\r\n    \"active\" : false\r\n}"
 				},
 				"url": {
 					"raw": "localhost:8080/api/v1/proxies",
@@ -181,7 +191,7 @@
 				}
 			},
 			"request": {
-				"method": "DELETE",
+				"method": "PUT",
 				"header": [
 					{
 						"key": "Accept",
@@ -191,10 +201,13 @@
 					{
 						"key": "Content-Type",
 						"value": "application/json",
-						"type": "default",
-						"disabled": true
+						"type": "default"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"active\" : true,\r\n    \"type\" : \"SOCKS4\"\r\n}"
+				},
 				"url": {
 					"raw": "localhost:8080/api/v1/proxies/1",
 					"host": [
