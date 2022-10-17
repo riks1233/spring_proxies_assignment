@@ -121,8 +121,8 @@ To set up:
 - In `app-1` container CLI Run
 
       / # cd app
-      / # gradle flywayMigrate bootRun
-- The application should now be running fully inside the containers with 8080 port mapped to host machine.
+      /app # gradle flywayMigrate bootRun
+- The application should now be running fully inside the containers with port 8080 mapped to host machine's port 8080.
 
 The Docker instance's `/app` directory is volume-linked to the repository's `app` directory. And as this project is using devtools, you can dispatch `./gradlew classes` command (locally) to rebuild classes and trigger hot restart of devtools, if the application is running.
 
