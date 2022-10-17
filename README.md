@@ -1,5 +1,7 @@
 # Proxies test assignment
 
+Assignment details can be found in `assignment.pdf`.
+
 # Versions
 
 Created with:
