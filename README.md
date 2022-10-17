@@ -84,7 +84,7 @@ On error response status is 400 and error JSON response body structure is:
 
 ## Local dev environment
 
-- Have Java 17 installed.
+- Have Java 17 and Docker (for containerized database) installed.
 - From `.env.dist` template file create `.env` file and populate it with relevant values. Those will be used as environment variables by the Spring Boot application and to set up a database. Those can be found in `app/build.gradle`, `app/src/main/resources/application.properties` and Docker compose files.
 - Based on your OS, add those environment variables to your environment. Note that environment variables set in the following ways will only affect current shell instance.
   - For Windows, run `bin/load_env_vars_win.ps1` script.
@@ -94,6 +94,7 @@ On error response status is 400 and error JSON response body structure is:
   - If you want local machine database instead, then it is up to you. ;)
 - Get into the `app` directory and run the application with `./gradlew flywayMigrate bootRun`
   - **Note**: if you are using GUI tools to launch the application, make sure they consider the `.env` variables.
+- The application should now be running and available at port 8080. Try to access endpoints using `http://localhost:8080` as base url. For example, `http://localhost:8080/api/v1/proxies?page=1&per_page=10`.
 
 ## Docker dev environment
 
