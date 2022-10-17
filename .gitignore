@@ -3,3 +3,6 @@
 
 ### Env variables ###
 .env
+
+### Log files ###
+logs/

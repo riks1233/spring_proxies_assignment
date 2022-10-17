@@ -28,13 +28,13 @@ Created with:
       - Example:
 
             {
-                "name" : "chorizo",
+                "name" : "testname1",
                 "type" : "HTTP",
-                "hostname" : "localhost",
+                "hostname" : "localhost1",
                 "port" : 8080,
-                "username" : "barmalej123",
-                "password" : "parolj4ik",
-                "active" : false
+                "username" : "testusername1",
+                "password" : "password",
+                "active" : true
             }
   - Returns the same proxy but with id.
 - `/api/v1/proxies/{id}` [GET] - Get a specific proxy.
@@ -47,7 +47,7 @@ Created with:
       - Example:
 
             {
-                "name" : "boba",
+                "name" : "testname2",
                 "active" : false
             }
   - Returns that proxy with updated values.
@@ -56,7 +56,7 @@ Created with:
 
 ## Success
 
-Success JSON response object structure:
+On success response status is 200 and success JSON response body structure is:
 
 ```json
 {
@@ -67,7 +67,7 @@ Success JSON response object structure:
 
 ## Error
 
-Error JSON response object structure
+On error response status is 400 and error JSON response body structure is:
 
 ```json
 {
@@ -83,52 +83,57 @@ Error JSON response object structure
 ## Local dev environment
 
 - Have Java 17 installed.
-- Create `.env` file from its distribution template file `.env.dist` and populate with relevant values. Those will be used by the Spring Boot application and to set up a database, as `app/build.gradle` and `app/src/main/resources/application.properties` use environment variables.
-- Based on your OS, add those environment variables to your environment. Note that environment variables set in the following ways affect only current shell instance.
+- From `.env.dist` template file create `.env` file and populate it with relevant values. Those will be used as environment variables by the Spring Boot application and to set up a database. Those can be found in `app/build.gradle`, `app/src/main/resources/application.properties` and compose files.
+- Based on your OS, add those environment variables to your environment. Note that environment variables set in the following ways will only affect current shell instance.
   - For Windows, run `bin/load_env_vars_win.ps1` script.
-  - For linux, run `source .env`.
-- Set up the PostgreSQL database (container or local machine.)
-  - Container: launch a detached PostgreSQL database Docker container with `docker compose -f db_compose.yml --env-file .env up -d`. Note that Docker's documentation states "Values set in the shell environment override those set in the .env file."
-  - Local machine: up to you :)
+  - For Linux, run `source .env`.
+- Set up the PostgreSQL database (container **or** local machine.)
+  - For a containerized database, launch a detached PostgreSQL database Docker container with `docker compose -f db_compose.yml --env-file .env up -d`. **Note** that Docker's documentation states "**Values set in the shell environment override those set in the .env file.**"
+  - If you want local machine database instead, then it is up to you. ;)
 - Get into the `app/` directory and run the application with `./gradlew flywayMigrate bootRun`
-  - If you are using GUI tools to launch the application, make sure that they consider the `.env` variables.
+  - **Note**: ff you are using GUI tools to launch the application, make sure that they consider the `.env` variables.
 
 ## Docker dev environment
 
 The idea was to have a containerized development environment instead of your local machine. This failed, due to multiple reasons:
 - Launching `gradle bootRun` inside the container was very slow, at least on Windows.
-- To set up a separate database for tests, it needs a different port on the same network than 5432, which is not configurable for postgres docker image out-of-the-box.
+- To set up a separate database for tests, it needs a different port on the same network than 5432, which is not configurable for postgres Docker image out-of-the-box.
 - Cumbersome to utilize devtools package hot restart, when the app is launched inside the container.
 
 But the benefits that were to be achieved are:
 - Easy set-up of development environment independent of host machine. Would not require to download and reconfigure to jdk17 if host machine has another version of jdk.
 - Easy containerized deploy to production which is also independent of host machine. The development, testing and production all could've used the same OS and jdk verison.
 
-### Set up
+### How to set it up
 
-This approach works, but does not support testing and is slow. If you're curious to test this, make sure:
-- You are not running `localhost` as your `DB_HOST` environment variable in `.env`.
-- Use `gradle` instead of `./gradlew`.
-- To remember that Docker's documentation states "Values set in the shell environment override those set in the .env file." So restart the shell beforehand, if needed.
+This approach works, but does not support testing and is very slow. If you're curious to set this up, make sure:
+- That your `DB_HOST` environment variable in `.env` is not set to `localhost`.
+- To Use `gradle` inside the dev container instead of `./gradlew`.
 
-    docker compose -f docker_env_compose.yml --env-file .env up -d
+- Launch new shell (**should not** contain `.env` environment variables).
+- Run
 
-`// attach to app-1 container CLI`
+      docker compose -f docker_env_compose.yml --env-file .env up -d
 
-    / # cd app
-    / # gradle flywayMigrate bootRun
+- `// attach to app-1 container CLI, for example, through Docker desktop`
+- Run
 
-The docker instance's `/app` directory is volume-linked to the repository's `app` directory. And as this project is using devtools, you can dispatch `./gradlew classes` command (locally) to rebuild classes and trigger hot restart of devtools, if the application is running.
+      / # cd app
+      / # gradle flywayMigrate bootRun
+- That should be it.
+
+The Docker instance's `/app` directory is volume-linked to the repository's `app` directory. And as this project is using devtools, you can dispatch `./gradlew classes` command (locally) to rebuild classes and trigger hot restart of devtools, if the application is running.
 
 # Testing
 
-- Run `./gradlew flywayTestDBClean flywayTestDBMigrate test` to run integration tests. Note that `ProxyControllerTest` tests are sequential (`@TestMethodOrder`).
+- Run `./gradlew flywayTestDBClean flywayTestDBMigrate test` to run tests. Note that `AcceptanceSuiteTest` tests are sequential (`@TestMethodOrder`). This seems to be a bad and hardly maintainable approach, but wanted to try it out and it seems sufficient for this particular application. So integration tests seemed unnecessary.
 
 # Improvements
 
 Here is a list of improvements that could have been made to the project, but haven't been due to either lack of knowledge or time.
 
-- Make acceptance tests independent of eachother by calling `flywayClean` and `flywayMigrate` before each test. Tried and did not figure out how to call gradle tasks programmatically. Also, I do aknowledge that the numbered naming is stupid and is there only to support ordering by name.
-- Make gradle pick up environment variables automatically before `bootRun` or `build` or other tasks. Tried and did not figure out how to do this.
-- When a malformed JSON is sent by used and it is fed to the parser, it resolves to a generic JSON parse exception. It would be good to tell the end user which specific field failed to be parsed, instead of generic error.
-- When a constraint is violated (for example, database unique record constraint), then a better error message could have been shown to user, instead of flashing an actual database constraint name.
+- Make `AcceptanceSuiteTest` tests independent of eachother by calling `flywayClean` and `flywayMigrate` before each test. Tried and could not figure out how to call gradle tasks programmatically. Also, I do aknowledge that the numbered naming is stupid. It is there only to support test ordering by name.
+- Make gradle pick up environment variables automatically before `bootRun` or `build` or other tasks. Tried and could not figure out how to do this.
+- When a malformed JSON is sent by the user and it is fed to the parser, the parser resolves to a generic JSON parse exception. Instead of a generic error, it would be good to tell the end user which specific field failed to be parsed.
+- When a constraint is violated (for example, database unique record constraint), then a better error message could have been shown to the user, instead of flashing an actual database constraint name.
+- Test coverage can always be improved. ;)

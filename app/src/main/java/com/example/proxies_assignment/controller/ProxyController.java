@@ -58,9 +58,7 @@ public class ProxyController {
     }
 
     @GetMapping("/{id}")
-    public Response<Proxy> getProxy(
-        @PathVariable("id") long id
-    ) {
+    public Response<Proxy> getProxy(@PathVariable("id") long id) {
         Optional<Proxy> existingProxyOptional = proxyRepository.findById(id);
         if (existingProxyOptional.isPresent()) {
             return new SuccessResponse<Proxy>(existingProxyOptional.get());
@@ -69,9 +67,7 @@ public class ProxyController {
     }
 
     @PostMapping("")
-    public Response<Proxy> createProxy(
-        @Valid @RequestBody Proxy proxy
-    ) {
+    public Response<Proxy> createProxy(@Valid @RequestBody Proxy proxy) {
         Proxy savedProxy = proxyRepository.save(proxy);
         return new SuccessResponse<>(savedProxy);
     }
@@ -92,9 +88,7 @@ public class ProxyController {
     }
 
     @DeleteMapping("/{id}")
-    public Response<Proxy> deleteProxy(
-        @PathVariable("id") long id
-    ) {
+    public Response<Proxy> deleteProxy(@PathVariable("id") long id) {
         Optional<Proxy> proxy = proxyRepository.findById(id);
         if (proxy.isPresent()) {
             proxyRepository.deleteById(id);

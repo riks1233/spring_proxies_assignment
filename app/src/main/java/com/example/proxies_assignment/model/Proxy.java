@@ -1,6 +1,5 @@
 package com.example.proxies_assignment.model;
 
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
@@ -24,6 +23,7 @@ public class Proxy {
         SOCKS4,
         SOCKS5,
     }
+
     @Enumerated(EnumType.STRING)
     // @NotNull(message = "`type` should be provided.")
     private Type type;
@@ -54,16 +54,17 @@ public class Proxy {
     @NotNull(message = "`active` should be provided.")
     private Boolean active;
 
-    public Proxy() {}
+    public Proxy() {
+    }
+
     public Proxy(
-        String name,
-        Type type,
-        String hostname,
-        int port,
-        String username,
-        String plaintextPassword,
-        boolean active
-    ) {
+            String name,
+            Type type,
+            String hostname,
+            int port,
+            String username,
+            String plaintextPassword,
+            boolean active) {
         this.name = name;
         this.type = type;
         this.hostname = hostname;
@@ -80,48 +81,62 @@ public class Proxy {
     public long getId() {
         return id;
     }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public Type getType() {
         return type;
     }
+
     public void setType(Type type) {
         this.type = type;
     }
+
     public String getHostname() {
         return hostname;
     }
+
     public void setHostname(String hostname) {
         this.hostname = hostname;
     }
+
     public Integer getPort() {
         return port;
     }
+
     public void setPort(int port) {
         this.port = port;
     }
+
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
+
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String plaintextPassword) {
         this.password = hashPlaintextPassword(plaintextPassword);
     }
+
     // Set password without automatically hashing it.
     // Useful when wanting to set password to an already
     // existing hash.
     public void setPasswordWithoutHashing(String password) {
         this.password = password;
     }
+
     public Boolean isActive() {
         return active;
     }
