@@ -54,17 +54,17 @@ public class Proxy {
     @NotNull(message = "`active` should be provided.")
     private Boolean active;
 
-    public Proxy() {
-    }
+    public Proxy() {}
 
     public Proxy(
-            String name,
-            Type type,
-            String hostname,
-            int port,
-            String username,
-            String plaintextPassword,
-            boolean active) {
+        String name,
+        Type type,
+        String hostname,
+        int port,
+        String username,
+        String plaintextPassword,
+        boolean active
+    ) {
         this.name = name;
         this.type = type;
         this.hostname = hostname;

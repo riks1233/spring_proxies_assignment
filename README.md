@@ -90,7 +90,7 @@ On error response status is 400 and error JSON response body structure is:
 - Set up the PostgreSQL database (container **or** local machine.)
   - For a containerized database, launch a detached PostgreSQL database Docker container with `docker compose -f db_compose.yml --env-file .env up -d`. **Note** that Docker's documentation states "**Values set in the shell environment override those set in the .env file.**"
   - If you want local machine database instead, then it is up to you. ;)
-- Get into the `app/` directory and run the application with `./gradlew flywayMigrate bootRun`
+- Get into the `app` directory and run the application with `./gradlew flywayMigrate bootRun`
   - **Note**: if you are using GUI tools to launch the application, make sure they consider the `.env` variables.
 
 ## Docker dev environment
@@ -128,7 +128,7 @@ The Docker instance's `/app` directory is volume-linked to the repository's `app
 
 # Testing
 
-- Run `./gradlew flywayTestDBClean flywayTestDBMigrate test` to run tests. Note that `AcceptanceSuiteTest` tests are sequential (`@TestMethodOrder`). This seems to be a bad and hardly maintainable approach, but wanted to try it out and it seems sufficient for this particular application. So integration tests were skipped.
+- Run `./gradlew flywayTestDBClean flywayTestDBMigrate test` in `app` directory to run tests. Note that `AcceptanceSuiteTest` tests are sequential (`@TestMethodOrder`). This seems to be a bad and hardly maintainable approach, but wanted to try it out and it seems sufficient for this particular application. So integration tests were skipped.
 
 # Improvements
 

@@ -1,4 +1,4 @@
 package com.example.proxies_assignment.general;
 
-// Used only for code readability purposes.
+// Used for code readability purposes only.
 public class Null {}

@@ -1,9 +1,11 @@
 # Helper script for local Windows development to set environment variables
-# from .dev_env located in root repository folder.
+# from .env located in root repository folder.
 #
-# BE CAREFUL! Documentation states "Values set in the shell environment override those set in the .env file."
-# So if you would like to execute `docker compose` later with environment variables from .env file, make sure to
-# do so from a fresh shell without relevant environment variables set.
+# BE CAREFUL! Docker documentation states "Values set in the shell
+# environment override those set in the .env file." So if you would like
+# to execute `docker compose` later with environment variables from .env file,
+# make sure to do so from a fresh shell which does not have .env environment
+# variables loaded yet.
 
 $scriptDir = Split-Path $MyInvocation.MyCommand.Path
 $envFile = "$scriptDir\..\.env"
