@@ -15,14 +15,9 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -55,7 +50,7 @@ class AcceptanceSuiteTest {
                 .andExpect(status().isOk())
                 .andReturn();
             String content = requestResult.getResponse().getContentAsString();
-            assertTrue(content.contains("[]"));
+            assertTrue(content.contains("\"data\":[]"));
         } catch (Exception e) {
             System.out.println("Got exception, but shouldn't have: " + e.getMessage());
         }
@@ -72,11 +67,11 @@ class AcceptanceSuiteTest {
                         {
                             "name" : "testname1",
                             "type" : "HTTP",
-                            "hostname" : "localhost",
-                            "port" : 8080,
+                            "hostname" : "localhost1",
+                            "port" : 8081,
                             "username" : "testusername1",
                             "password" : "password",
-                            "active" : false
+                            "active" : true
                         }
                     """
                 ))
@@ -84,8 +79,15 @@ class AcceptanceSuiteTest {
                 .andExpect(status().isOk())
                 .andReturn();
             String content = requestResult.getResponse().getContentAsString();
-            assertTrue(content.contains("testname1"));
             assertTrue(content.contains("\"id\":1"));
+            assertTrue(content.contains("\"name\":\"testname1\""));
+            assertTrue(content.contains("\"type\":\"HTTP\""));
+            assertTrue(content.contains("\"hostname\":\"localhost1\""));
+            assertTrue(content.contains("\"port\":8081"));
+            assertTrue(content.contains("\"username\":\"testusername1\""));
+            // Password is hashed along the way.
+            assertTrue(content.contains("\"password\":"));
+            assertTrue(content.contains("\"active\":true"));
         } catch (Exception e) {
             System.out.println("Got exception, but shouldn't have: " + e.getMessage());
         }
@@ -103,10 +105,10 @@ class AcceptanceSuiteTest {
                             "name" : "testname1",
                             "type" : "HTTP",
                             "hostname" : "localhost1",
-                            "port" : 8080,
+                            "port" : 8081,
                             "username" : "testusername1",
                             "password" : "password",
-                            "active" : false
+                            "active" : true
                         }
                     """
                 ))
@@ -133,7 +135,7 @@ class AcceptanceSuiteTest {
                             "name" : "testname2",
                             "type" : "HTTPS",
                             "hostname" : "localhost2",
-                            "port" : 8080,
+                            "port" : 8082,
                             "username" : "testusername2",
                             "password" : "password",
                             "active" : false
@@ -165,7 +167,7 @@ class AcceptanceSuiteTest {
                             "name" : "testname3",
                             "type" : "HTTPS",
                             "hostname" : "localhost3",
-                            "port" : 8080,
+                            "port" : 8082,
                             "username" : "testusername3",
                             "password" : "password",
                             "active" : "malformed"
@@ -195,7 +197,7 @@ class AcceptanceSuiteTest {
                             "name" : "testname3",
                             "type" : "HTTPS",
                             "hostname" : "localhost3",
-                            "port" : 8080,
+                            "port" : 8083,
                             "username" : "testusername3",
                             "password" : "password",
                             "active" : false
@@ -221,10 +223,17 @@ class AcceptanceSuiteTest {
                 .andExpect(status().isOk())
                 .andReturn();
             String content = requestResult.getResponse().getContentAsString();
-            assertTrue(content.contains("testname1"));
             assertTrue(content.contains("\"id\":1"));
+            assertTrue(content.contains("\"name\":\"testname1\""));
+            assertTrue(content.contains("\"type\":\"HTTP\""));
+            assertTrue(content.contains("\"hostname\":\"localhost1\""));
+            assertTrue(content.contains("\"port\":8081"));
+            assertTrue(content.contains("\"username\":\"testusername1\""));
+            assertTrue(content.contains("\"password\":"));
+            assertTrue(content.contains("\"active\":true"));
             // Verify that we do not see any other proxy data.
             assertFalse(content.contains("testname2"));
+            assertFalse(content.contains("\"id\":3"));
         } catch (Exception e) {
             System.out.println("Got exception, but shouldn't have: " + e.getMessage());
         }
@@ -254,8 +263,23 @@ class AcceptanceSuiteTest {
                 .andExpect(status().isOk())
                 .andReturn();
             String content = requestResult.getResponse().getContentAsString();
-            assertTrue(content.contains("testname1"));
-            assertTrue(content.contains("testname2"));
+            // First proxy.
+            assertTrue(content.contains("\"id\":1"));
+            assertTrue(content.contains("\"name\":\"testname1\""));
+            assertTrue(content.contains("\"type\":\"HTTP\""));
+            assertTrue(content.contains("\"hostname\":\"localhost1\""));
+            assertTrue(content.contains("\"port\":8081"));
+            assertTrue(content.contains("\"username\":\"testusername1\""));
+            assertTrue(content.contains("\"active\":true"));
+            // Second proxy.
+            assertTrue(content.contains("\"id\":3"));
+            assertTrue(content.contains("\"name\":\"testname2\""));
+            assertTrue(content.contains("\"type\":\"HTTPS\""));
+            assertTrue(content.contains("\"hostname\":\"localhost2\""));
+            assertTrue(content.contains("\"port\":8082"));
+            assertTrue(content.contains("\"username\":\"testusername2\""));
+            assertTrue(content.contains("\"active\":false"));
+
         } catch (Exception e) {
             System.out.println("Got exception, but shouldn't have: " + e.getMessage());
         }
@@ -368,7 +392,7 @@ class AcceptanceSuiteTest {
             String content = requestResult.getResponse().getContentAsString();
             assertFalse(content.contains("testname1"));
             assertFalse(content.contains("testname2"));
-            assertTrue(content.contains("[]"));
+            assertTrue(content.contains("\"data\":[]"));
         } catch (Exception e) {
             System.out.println("Got exception, but shouldn't have: " + e.getMessage());
         }
@@ -409,7 +433,7 @@ class AcceptanceSuiteTest {
                         {
                             "name" : "testname2.2",
                             "type" : "SOCKS4",
-                            "acitve" : true
+                            "active" : true
                         }
                     """
                 ))
@@ -417,8 +441,10 @@ class AcceptanceSuiteTest {
                 .andExpect(status().isOk())
                 .andReturn();
             String content = requestResult.getResponse().getContentAsString();
+            assertTrue(content.contains("\"id\":3"));
             assertTrue(content.contains("testname2.2"));
             assertTrue(content.contains("SOCKS4"));
+            assertTrue(content.contains("\"active\":true"));
         } catch (Exception e) {
             System.out.println("Got exception, but shouldn't have: " + e.getMessage());
         }
@@ -436,7 +462,7 @@ class AcceptanceSuiteTest {
                         {
                             "name" : "testname2.3",
                             "type" : "SOCKS4",
-                            "acitve" : "malformed"
+                            "active" : "malformed"
                         // missing closing curly brace.
                     """
                 ))
@@ -451,7 +477,7 @@ class AcceptanceSuiteTest {
     }
 
     @Test
-    void _20_getAndVerifyAll() {
+    void _20_getAndVerifyAllOk() {
         try {
             MvcResult requestResult = this.mockMvc.perform(
                 get("/api/v1/proxies?page=1&per_page=10"))
@@ -492,6 +518,7 @@ class AcceptanceSuiteTest {
                 .andExpect(status().isOk())
                 .andReturn();
             String content = requestResult.getResponse().getContentAsString();
+            assertTrue(content.contains("\"id\":1"));
             assertTrue(content.contains("testname1"));
             assertTrue(content.contains("HTTP"));
         } catch (Exception e) {
@@ -500,7 +527,7 @@ class AcceptanceSuiteTest {
     }
 
     @Test
-    void _23_getAndVerifyAll() {
+    void _23_getAndVerifyAllOk() {
         try {
             MvcResult requestResult = this.mockMvc.perform(
                 get("/api/v1/proxies?page=1&per_page=10"))

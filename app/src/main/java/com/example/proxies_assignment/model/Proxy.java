@@ -47,7 +47,6 @@ public class Proxy {
 
     // Not validating password because it is immediately converted to hash.
     // Password validation is expected to be done on the client side.
-    // And ideally get encrypted already on the client side.
     @NotBlank(message = "`password` should be provided.")
     private String password;
 
@@ -117,6 +116,9 @@ public class Proxy {
     public void setPassword(String plaintextPassword) {
         this.password = hashPlaintextPassword(plaintextPassword);
     }
+    // Set password without automatically hashing it.
+    // Useful when wanting to set password to an already
+    // existing hash.
     public void setPasswordWithoutHashing(String password) {
         this.password = password;
     }
