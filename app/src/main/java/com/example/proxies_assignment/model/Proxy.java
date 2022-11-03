@@ -12,7 +12,6 @@ public class Proxy {
     @GeneratedValue
     private long id;
 
-    // @Column(length = 120, unique = true, nullable = false)
     @NotBlank
     @Length(min = 2, max = 120, message = "`name` should be provided.")
     private String name;
@@ -25,32 +24,25 @@ public class Proxy {
     }
 
     @Enumerated(EnumType.STRING)
-    // @NotNull(message = "`type` should be provided.")
     private Type type;
 
-    // @Column(length = 120, unique = true, nullable = false)
     @NotBlank(message = "`hostname` should be provided.")
     @Length(min = 2, max = 120, message = "`hostname` should have 2-120 characters.")
     private String hostname;
 
-    // Validated on application level to range from 0 to 65535.
-    // @Column(nullable = false)
     @NotNull(message = "`port` should be provided.")
     @Min(value = 0, message = "`port` value must be in range 0-65535.")
     @Max(value = 65535, message = "`port` value must be in range 0-65535.")
     private Integer port;
 
-    // @Column(length = 120, nullable = false)
     @NotBlank(message = "`username` should be provided.")
     @Length(min = 2, max = 120, message = "`username` should have 2-120 characters.")
     private String username;
 
     // Not validating password because it is immediately converted to hash.
-    // Password validation is expected to be done on the client side.
     @NotBlank(message = "`password` should be provided.")
     private String password;
 
-    // @Column(nullable = false)
     @NotNull(message = "`active` should be provided.")
     private Boolean active;
 

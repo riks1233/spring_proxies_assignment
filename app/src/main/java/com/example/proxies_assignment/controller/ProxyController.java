@@ -39,7 +39,7 @@ public class ProxyController {
         if (page < 0) {
             throw new GenericErrorException("`page` must be greater than or equal to 1.");
         }
-        if (perPage < 1) {
+        if (perPage < 0) {
             throw new GenericErrorException("`per_page` must be greater than or equal to 1.");
         }
         Pageable pageable = PageRequest.of(page, perPage);
@@ -52,7 +52,6 @@ public class ProxyController {
         @RequestParam(name = "name") String name,
         @RequestParam(name = "type") String type
     ) {
-        System.out.println(type.toString());
         List<Proxy> proxies = proxyRepository.findAllFilteredByNameAndTypeLike(name, type);
         return new SuccessResponse<>(proxies);
     }

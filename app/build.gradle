@@ -25,7 +25,6 @@ dependencies {
 
 test {
     testLogging {
-        // Show output of System.out.println();
         showStandardStreams = true
     }
 }
